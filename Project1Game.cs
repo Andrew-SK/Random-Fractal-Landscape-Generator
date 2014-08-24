@@ -20,6 +20,7 @@
 
 using System;
 
+
 using SharpDX;
 using SharpDX.Toolkit;
 
@@ -28,11 +29,18 @@ namespace Project1
     // Use this namespace here in case we need to use Direct3D11 namespace as well, as this
     // namespace will override the Direct3D11.
     using SharpDX.Toolkit.Graphics;
+    using SharpDX.Toolkit.Input;
 
     public class Project1Game : Game
     {
         private GraphicsDeviceManager graphicsDeviceManager;
         private GameObject model;
+        public KeyboardManager keyboardManager;
+        public KeyboardState keyboardState;
+
+        public Vector3 cameraEye;
+        public Vector3 cameraTarget;
+        public Vector3 cameraUp;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Project1Game" /> class.
@@ -42,9 +50,17 @@ namespace Project1
             // Creates a graphics manager. This is mandatory.
             graphicsDeviceManager = new GraphicsDeviceManager(this);
 
+            keyboardManager = new KeyboardManager(this);
+
+            // Set up camera variables
+            cameraEye = new Vector3(0, 0, -5);
+            cameraTarget = new Vector3(0, 0, 0);
+            cameraUp = Vector3.UnitY;
+        
             // Setup the relative directory to the executable directory
             // for loading contents with the ContentManager
             Content.RootDirectory = "Content";
+
         }
 
         protected override void LoadContent()
@@ -65,6 +81,7 @@ namespace Project1
 
         protected override void Update(GameTime gameTime)
         {
+            keyboardState = keyboardManager.GetState();
             model.Update(gameTime);
 
             // Handle base.Update
@@ -77,7 +94,7 @@ namespace Project1
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             model.Draw(gameTime);
-
+            
             // Handle base.Draw
             base.Draw(gameTime);
         }
