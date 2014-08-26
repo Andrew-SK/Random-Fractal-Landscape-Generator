@@ -35,12 +35,11 @@ namespace Project1
     {
         private GraphicsDeviceManager graphicsDeviceManager;
         private GameObject model;
+        public Camera camera;
+
         public KeyboardManager keyboardManager;
         public KeyboardState keyboardState;
 
-        public Vector3 cameraEye;
-        public Vector3 cameraTarget;
-        public Vector3 cameraUp;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Project1Game" /> class.
@@ -50,12 +49,10 @@ namespace Project1
             // Creates a graphics manager. This is mandatory.
             graphicsDeviceManager = new GraphicsDeviceManager(this);
 
+            // Creating the keyboard manager for keyboard Camera controls 
             keyboardManager = new KeyboardManager(this);
 
-            // Set up camera variables
-            cameraEye = new Vector3(0, 0, -5);
-            cameraTarget = new Vector3(0, 0, 0);
-            cameraUp = Vector3.UnitY;
+            
         
             // Setup the relative directory to the executable directory
             // for loading contents with the ContentManager
@@ -66,6 +63,9 @@ namespace Project1
         protected override void LoadContent()
         {
             model = new Landscape(this);
+
+            // Camera object containing all Camera specific controls and info
+            this.camera = new Camera(new Vector3(0, 0, -5), new Vector3(0, 0, 0), Vector3.UnitY, this);
 
             // Create an input layout from the vertices
 
@@ -83,6 +83,8 @@ namespace Project1
         {
             keyboardState = keyboardManager.GetState();
             model.Update(gameTime);
+            keyboardState = keyboardManager.GetState();
+            camera.Update(gameTime);
 
             // Handle base.Update
             base.Update(gameTime);
