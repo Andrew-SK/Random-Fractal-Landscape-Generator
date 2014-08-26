@@ -1,0 +1,27 @@
+number of squares made is 2^(I + 2) where I is the number of iterations 
+
+for the size make the array a square with dimensions of a power of two plus one. this will give a center point and make it easy to divide.
+
+
+
+
+Data Structure:
+
+For the height values just have an empty array and fill in the height
+values as you go. I can map these points into the world by systematicallymaking vertices in the order that I need to pass them into the renderer.
+
+these can be spaced a constant distance apart. 
+	- mabye have the spacing dependent on the number of iterations 
+	  of the algorithm. This way the total width of the terrain
+	  would be consistent.
+
+
+Steps : 
+
+	1. starting with the seeded four corner points generate the 
+	   height value for the point in the middle. This is the diamond	    step.
+
+	2. Then generate a value in the middle of all the diamonds.
+	   I will have to confirm but I assume this is calculated from 
+	   the average of all neighbouring vertices. I.E. the mid point 
+	   from the previous step and the corners that it is between. 
