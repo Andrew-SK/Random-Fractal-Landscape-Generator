@@ -35,12 +35,16 @@ namespace Project1
     {
         private GraphicsDeviceManager graphicsDeviceManager;
         private GameObject model;
+
         public Camera camera;
 
         public KeyboardManager keyboardManager;
         public KeyboardState keyboardState;
 
+        public MouseManager mouseManager;
+        public MouseState mouseState;
 
+        
         /// <summary>
         /// Initializes a new instance of the <see cref="Project1Game" /> class.
         /// </summary>
@@ -51,7 +55,9 @@ namespace Project1
 
             // Creating the keyboard manager for keyboard Camera controls 
             keyboardManager = new KeyboardManager(this);
-
+            
+            // Creating the mouse manager for mouse Camera controls
+            mouseManager = new MouseManager(this);
             
         
             // Setup the relative directory to the executable directory
@@ -65,8 +71,8 @@ namespace Project1
             model = new Landscape(this);
 
             // Camera object containing all Camera specific controls and info
-            this.camera = new Camera(new Vector3(0, 0, -5), new Vector3(0, 0, 0), Vector3.UnitY, this);
-
+            //this.camera = new Camera(new Vector3(0, 0, -5), new Vector3(0, 0, -4), Vector3.UnitY, this);
+            this.camera = new Camera(new Vector3(-25, 0, -22), new Vector3(0, 0, -4), Vector3.UnitY, this);
             // Create an input layout from the vertices
 
             base.LoadContent();
@@ -75,17 +81,26 @@ namespace Project1
         protected override void Initialize()
         {
             Window.Title = "Project 1";
-
+            this.IsMouseVisible = true;
             base.Initialize();
         }
 
         protected override void Update(GameTime gameTime)
         {
+
+            // Getting input device states
             keyboardState = keyboardManager.GetState();
+            mouseState = mouseManager.GetState();
+
+            if (keyboardState.IsKeyDown(Keys.Escape))
+            {
+                this.Exit();
+            }
+
             model.Update(gameTime);
-            keyboardState = keyboardManager.GetState();
             camera.Update(gameTime);
 
+            
             // Handle base.Update
             base.Update(gameTime);
         }
@@ -96,6 +111,7 @@ namespace Project1
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             model.Draw(gameTime);
+
             
             // Handle base.Draw
             base.Draw(gameTime);

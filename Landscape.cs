@@ -87,7 +87,7 @@ namespace Project1
 
             // update basicEffect View matrix 
             basicEffect.View = Matrix.LookAtLH(game.camera.eye, game.camera.target, game.camera.up);
-            
+
             // Setup the vertices
             game.GraphicsDevice.SetVertexBuffer(vertices);
             game.GraphicsDevice.SetVertexInputLayout(inputLayout);
