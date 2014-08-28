@@ -25,9 +25,11 @@ namespace Project1
             }
         }
 
-        public void diamondsquare(ref float[][] heightMap, int topLeft, int topRight, int botLeft, int botRight)
+        public void diamondsquare(ref float[][] heightMap, int topLeft, int subArraySize)
         {
-
+            // TODO heightmap is the main array top left is the top left corner of the 
+            // sub array and subArraySize is the length of the new sub array 
+            // this is all the information you need to get all the dimensions
         }
 
         public Landscape(Project1Game game, float c1, float c2, float c3, float c4, int recDepth)
