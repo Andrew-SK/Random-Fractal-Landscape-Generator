@@ -56,7 +56,11 @@ namespace Project1
             {
                 this.pitch = (float)-Math.PI / 2;
             }
-
+	    // NOTE try 2 things
+	    // directly edit the reference rather than using the 
+	    // transformed reference, and times the two rotation
+	    // matrices within the same Vector3.Transform call.
+	   
             // Rotation about Y axis
             Matrix RotationMatrix = Matrix.RotationY(this.yaw);
             Vector3 Transformedreference = (Vector3)Vector3.Transform(this.reference, RotationMatrix);
