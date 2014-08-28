@@ -11,50 +11,58 @@ namespace Project1
 {
     using SharpDX.Toolkit.Graphics;
     class Landscape : ColoredGameObject
-    {  
-        public Landscape(Project1Game game)
+    {
+        public int arraySize;
+        public int compArraySize(int rDepth)
         {
+            if (rDepth == 0)
+            {
+                return 2;
+            }
+            else
+            {
+                return (compArraySize(rDepth - 1) * 2) - 1;
+            }
+        }
+
+        public void diamondsquare(ref float[][] heightMap, int topLeft, int topRight, int botLeft, int botRight)
+        {
+
+        }
+
+        public Landscape(Project1Game game, float c1, float c2, float c3, float c4, int recDepth)
+        {
+
+            // recDepth of 0 would make a flat plane with only the 4 corner vertices
+            // Determine the size of the array depending of the recursion depth
+            arraySize = this.compArraySize(recDepth);
+
+            // Creating array structure in order to store height values for all vertices
+            // format will be heightMap[x][y] = z
+            float[][] heightMap = new float[arraySize][];
+
+            for (int i = 0; i < arraySize; i++){
+            
+                heightMap[i] = new float[arraySize];
+            
+            }
+
+            // set the four corner values
+            heightMap[0][0]                         = c1;
+            heightMap[arraySize - 1][0]             = c2;
+            heightMap[0][arraySize - 1]             = c3;
+            heightMap[arraySize - 1][arraySize - 1] = c4;
+
+
+
             vertices = Buffer.Vertex.New(
+                           
                 game.GraphicsDevice,
                 new[]
                     {
-                        new VertexPositionColor(new Vector3(-1.0f, -1.0f, -1.0f), Color.Orange), // Front
-                        new VertexPositionColor(new Vector3(-1.0f, 1.0f, -1.0f), Color.Orange),
-                        new VertexPositionColor(new Vector3(1.0f, 1.0f, -1.0f), Color.Orange),
-                        new VertexPositionColor(new Vector3(-1.0f, -1.0f, -1.0f), Color.Orange),
-                        new VertexPositionColor(new Vector3(1.0f, 1.0f, -1.0f), Color.Orange),
-                        new VertexPositionColor(new Vector3(1.0f, -1.0f, -1.0f), Color.Orange),
-                        new VertexPositionColor(new Vector3(-1.0f, -1.0f, 1.0f), Color.Orange), // BACK
-                        new VertexPositionColor(new Vector3(1.0f, 1.0f, 1.0f), Color.Orange),
-                        new VertexPositionColor(new Vector3(-1.0f, 1.0f, 1.0f), Color.Orange),
-                        new VertexPositionColor(new Vector3(-1.0f, -1.0f, 1.0f), Color.Orange),
-                        new VertexPositionColor(new Vector3(1.0f, -1.0f, 1.0f), Color.Orange),
-                        new VertexPositionColor(new Vector3(1.0f, 1.0f, 1.0f), Color.Orange),
-                        new VertexPositionColor(new Vector3(-1.0f, 1.0f, -1.0f), Color.OrangeRed), // Top
-                        new VertexPositionColor(new Vector3(-1.0f, 1.0f, 1.0f), Color.OrangeRed),
-                        new VertexPositionColor(new Vector3(1.0f, 1.0f, 1.0f), Color.OrangeRed),
-                        new VertexPositionColor(new Vector3(-1.0f, 1.0f, -1.0f), Color.OrangeRed),
-                        new VertexPositionColor(new Vector3(1.0f, 1.0f, 1.0f), Color.OrangeRed),
-                        new VertexPositionColor(new Vector3(1.0f, 1.0f, -1.0f), Color.OrangeRed),
-                        new VertexPositionColor(new Vector3(-1.0f, -1.0f, -1.0f), Color.OrangeRed), // Bottom
-                        new VertexPositionColor(new Vector3(1.0f, -1.0f, 1.0f), Color.OrangeRed),
-                        new VertexPositionColor(new Vector3(-1.0f, -1.0f, 1.0f), Color.OrangeRed),
-                        new VertexPositionColor(new Vector3(-1.0f, -1.0f, -1.0f), Color.OrangeRed),
-                        new VertexPositionColor(new Vector3(1.0f, -1.0f, -1.0f), Color.OrangeRed),
-                        new VertexPositionColor(new Vector3(1.0f, -1.0f, 1.0f), Color.OrangeRed),
-                        new VertexPositionColor(new Vector3(-1.0f, -1.0f, -1.0f), Color.DarkOrange), // Left
-                        new VertexPositionColor(new Vector3(-1.0f, -1.0f, 1.0f), Color.DarkOrange),
-                        new VertexPositionColor(new Vector3(-1.0f, 1.0f, 1.0f), Color.DarkOrange),
-                        new VertexPositionColor(new Vector3(-1.0f, -1.0f, -1.0f), Color.DarkOrange),
-                        new VertexPositionColor(new Vector3(-1.0f, 1.0f, 1.0f), Color.DarkOrange),
-                        new VertexPositionColor(new Vector3(-1.0f, 1.0f, -1.0f), Color.DarkOrange),
-                        new VertexPositionColor(new Vector3(1.0f, -1.0f, -1.0f), Color.DarkOrange), // Right
-                        new VertexPositionColor(new Vector3(1.0f, 1.0f, 1.0f), Color.DarkOrange),
-                        new VertexPositionColor(new Vector3(1.0f, -1.0f, 1.0f), Color.DarkOrange),
-                        new VertexPositionColor(new Vector3(1.0f, -1.0f, -1.0f), Color.DarkOrange),
-                        new VertexPositionColor(new Vector3(1.0f, 1.0f, -1.0f), Color.DarkOrange),
-                        new VertexPositionColor(new Vector3(1.0f, 1.0f, 1.0f), Color.DarkOrange),
-
+                        // E.g.
+                        //new VertexPositionColor(new Vector3(-1.0f, -1.0f, -1.0f), Color.Orange), // Front
+                        //new VertexPositionColor(new Vector3(-1.0f, 1.0f, -1.0f), Color.Orange),
 
                     });
 
@@ -96,5 +104,7 @@ namespace Project1
             basicEffect.CurrentTechnique.Passes[0].Apply();
             game.GraphicsDevice.Draw(PrimitiveType.TriangleList, vertices.ElementCount);
         }
+
+
     }
 }

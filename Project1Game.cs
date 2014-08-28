@@ -68,11 +68,11 @@ namespace Project1
 
         protected override void LoadContent()
         {
-            model = new Landscape(this);
+            model = new Landscape(this, 1f, 1f, 1f, 1f, 5);
 
             // Camera object containing all Camera specific controls and info
-            //this.camera = new Camera(new Vector3(0, 0, -5), new Vector3(0, 0, -4), Vector3.UnitY, this);
-            this.camera = new Camera(new Vector3(-25, 0, -22), new Vector3(0, 0, -4), Vector3.UnitY, this);
+            this.camera = new Camera(new Vector3(0, 0, -5), new Vector3(0, 0, -4), Vector3.UnitY, this);
+
             // Create an input layout from the vertices
 
             base.LoadContent();
@@ -81,6 +81,7 @@ namespace Project1
         protected override void Initialize()
         {
             Window.Title = "Project 1";
+            
             this.IsMouseVisible = true;
             base.Initialize();
         }
