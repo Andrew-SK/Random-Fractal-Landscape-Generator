@@ -56,6 +56,13 @@ namespace Project1
             {
                 this.pitch = (float)-Math.PI / 2;
             }
+	    
+	    // wrap around for X rotations to avoid 
+	    // complications
+	    if (this.yaw > 2 * Math.PI) {
+		this.yaw -= 2 * Math.PI);
+	    }
+
 	    // NOTE try 2 things
 	    // directly edit the reference rather than using the 
 	    // transformed reference, and times the two rotation
