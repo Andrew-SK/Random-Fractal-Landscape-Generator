@@ -57,29 +57,25 @@ namespace Project1
                 this.pitch = (float)-Math.PI / 2;
             }
 	    
-	    // wrap around for X rotations to avoid 
-	    // complications
-	    if (this.yaw > 2 * Math.PI) {
-		this.yaw -= 2 * Math.PI);
-	    }
+	        // wrap around for X rotations to avoid complications
 
-	    // NOTE try 2 things
-	    // directly edit the reference rather than using the 
-	    // transformed reference, and times the two rotation
-	    // matrices within the same Vector3.Transform call.
-	   
-            // Rotation about Y axis
-            Matrix RotationMatrix = Matrix.RotationY(this.yaw);
-            Vector3 Transformedreference = (Vector3)Vector3.Transform(this.reference, RotationMatrix);
+	        if (this.yaw > 2 * Math.PI) {
+		        this.yaw -= (float)(2 * Math.PI);
+	        }
 
-            // Rotation about X axis
-            RotationMatrix = Matrix.RotationX(this.pitch);
-            Transformedreference = (Vector3)Vector3.Transform(Transformedreference, RotationMatrix);
-            
-            // adding transformation to the target vector and setting variables 
-            // for next update
+            Matrix cameraRotation = Matrix.RotationX(this.pitch) * Matrix.RotationY(this.yaw);
+            Vector4 rotatedReferenceV4 = Vector3.Transform(this.reference, cameraRotation);
+            Vector3 rotatedReference = new Vector3(
+                                                       rotatedReferenceV4.X,
+                                                       rotatedReferenceV4.Y,
+                                                       rotatedReferenceV4.Z
+                                                  );
 
-            this.target = this.eye + Transformedreference;
+            this.target = this.eye + rotatedReference;
+
+
+
+
             game.mouseManager.SetPosition(new Vector2(0.5f, 0.5f));
             #endregion
 
@@ -136,8 +132,8 @@ namespace Project1
 
 
             // output the fps to console
-            // Console.Out.WriteLine("FPS: " + ((float)gameTime.FrameCount / gameTime.TotalGameTime.Seconds + 0.001f));
-            Console.Out.WriteLine("camera position : " + this.eye);
+             Console.Out.WriteLine("FPS: " + ((float)gameTime.FrameCount / gameTime.TotalGameTime.Seconds + 0.001f));
+            
         }
         
         public override void Draw(GameTime gameTime) {   }

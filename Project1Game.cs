@@ -68,7 +68,7 @@ namespace Project1
 
         protected override void LoadContent()
         {
-            model = new Landscape(this, 1f, 1f, 1f, 1f, 5);
+            model = new Landscape(this);
 
             // Camera object containing all Camera specific controls and info
             this.camera = new Camera(new Vector3(0, 0, -5), new Vector3(0, 0, -4), Vector3.UnitY, this);
@@ -82,7 +82,7 @@ namespace Project1
         {
             Window.Title = "Project 1";
             
-            this.IsMouseVisible = true;
+            this.IsMouseVisible = false;
             base.Initialize();
         }
 
