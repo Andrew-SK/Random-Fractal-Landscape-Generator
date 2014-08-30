@@ -124,7 +124,8 @@ namespace Project1
 
 
             // output the fps to console
-             Console.Out.WriteLine("FPS: " + ((float)gameTime.FrameCount / gameTime.TotalGameTime.Seconds + 0.001f));
+             //Console.Out.WriteLine("FPS: " + ((float)gameTime.FrameCount / gameTime.TotalGameTime.Seconds + 0.001f));
+           // Console.Out.WriteLine("camera pos : " + this.eye);
             
         }
         
