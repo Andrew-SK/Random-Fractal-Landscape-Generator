@@ -89,8 +89,8 @@
   <ItemGroup>
     <Compile Include="Camera.cs" />
     <Compile Include="GameObject.cs" />
-    <None Include="Landscape.cs.cube" />
     <Compile Include="Landscape.cs" />
+    <None Include="Landscape.cs.land" />
     <Compile Include="ColoredGameObject.cs" />
     <Compile Include="Project1Game.cs" />
     <Compile Include="Program.cs" />

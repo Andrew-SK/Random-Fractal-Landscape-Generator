@@ -46,17 +46,9 @@ namespace Project1
             this.yaw += angleX;
             this.pitch += angleY;
 
-            // limit the pitch to straight up and down
+            this.pitch = Math.Min(this.pitch, (float)Math.PI / 2 - 0.01f);
+            this.pitch = Math.Max(this.pitch, -(float)Math.PI / 2 - 0.01f);
 
-            if (this.pitch > Math.PI / 2)
-            {
-                this.pitch = (float)Math.PI / 2;
-            }
-            else if (this.pitch < -Math.PI / 2)
-            {
-                this.pitch = (float)-Math.PI / 2;
-            }
-	    
 	        // wrap around for X rotations to avoid complications
 
 	        if (this.yaw > 2 * Math.PI) {
