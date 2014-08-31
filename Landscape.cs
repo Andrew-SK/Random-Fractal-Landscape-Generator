@@ -16,11 +16,17 @@ namespace Project1
         // some variables to tweak generator
         public int randScaleFactor = 1;
         public int positionScale = 1;
-        // end 
+        // end
+
+        // Colour zones
+        float rock;
+        float snow;
+        // end
+
 
         public int arraySize;
         public float[][] heightMap;
-        public int redDepth;
+        public int recDepth;
         Random rand;
         
         public int compArraySize(int rDepth)
@@ -59,7 +65,7 @@ namespace Project1
 						avg /= 4;
 
 
-						heightMap[x][y] = avg + (((float)rand.NextDouble() - 0.5f) * (sideLength * randScaleFactor)); 
+						heightMap[x][y] = avg + ((rand.NextFloat(0f, 1f) - 0.5f) * (sideLength * randScaleFactor)); 
 
                     }
                 }
@@ -93,7 +99,7 @@ namespace Project1
                             avg /= 4;
                         }
 
-                        heightMap[x + halfSide][y] = avg + (((float)rand.NextDouble() - 0.5f) * (sideLength * randScaleFactor));
+                        heightMap[x + halfSide][y] = avg + ((rand.NextFloat(0f, 1f) - 0.5f) * (sideLength * randScaleFactor));
 
 
 
@@ -114,7 +120,7 @@ namespace Project1
                             avg /= 4;
                         }
 
-                        heightMap[x][y + halfSide] = avg + (((float)rand.NextDouble() - 0.5f) * (sideLength * randScaleFactor));
+                        heightMap[x][y + halfSide] = avg + ((rand.NextFloat(0f, 1f) - 0.5f) * (sideLength * randScaleFactor));
 						
 
 
@@ -127,7 +133,7 @@ namespace Project1
                                   heightMap[x + halfSide][y + halfSide];
                             avg /= 3;
 
-                            heightMap[x + halfSide][y + sideLength] = avg + (((float)rand.NextDouble() - 0.5f) * (sideLength * randScaleFactor));
+                            heightMap[x + halfSide][y + sideLength] = avg + ((rand.NextFloat(0f, 1f) - 0.5f) * (sideLength * randScaleFactor));
                         }
 
 						// check to see if you are on the far right side
@@ -139,12 +145,17 @@ namespace Project1
                                   heightMap[x + halfSide][y + halfSide];
                             avg /= 3;
 
-                            heightMap[x + sideLength][y + halfSide] = avg + (((float)rand.NextDouble() - 0.5f) * (sideLength * randScaleFactor));
+                            heightMap[x + sideLength][y + halfSide] = avg + ((rand.NextFloat(0f, 1f) - 0.5f) * (sideLength * randScaleFactor));
                         }
 
                     }
                 }            
             }
+        }
+
+        public void calcColourZones()
+        {
+
         }
 
         public Landscape(Project1Game game, float c1, float c2, float c3, float c4, int recDepth)
@@ -156,7 +167,7 @@ namespace Project1
             // recDepth of 0 would make a flat plane with only the 4 corner vertices
             // Determine the size of the array depending of the recursion depth
             this.arraySize = this.compArraySize(recDepth);
-            this.redDepth = recDepth;
+            this.recDepth = recDepth;
 
             // Creating array structure in order to store height values for all vertices
             // format will be heightMap[x][y] = z
@@ -181,8 +192,10 @@ namespace Project1
 
 			// Generate the rest of the hieght values 
             diamondsquare();
+            calcColourZones();
 
             VertexPositionColor[] vertexArray = new VertexPositionColor[(arraySize - 1) * (6 + (arraySize - 2) * 6)];
+            
             int pos = 0;
 			// Add the vertices to the array to make polygons
             for (int y = 0; y <= arraySize - 2; y++)
@@ -238,11 +251,9 @@ namespace Project1
 
         public override void Update(GameTime gameTime)
         {
-            // Rotate the cube.
+
             var time = (float)gameTime.TotalGameTime.TotalSeconds;
 
-            //basicEffect.World = Matrix.RotationX(time) * Matrix.RotationY(time * 2.0f) * Matrix.RotationZ(time * .7f);
-            //basicEffect.Projection = Matrix.PerspectiveFovLH((float)Math.PI / 4.0f, (float)game.GraphicsDevice.BackBuffer.Width / game.GraphicsDevice.BackBuffer.Height, 0.1f, 100.0f);
             
             
 

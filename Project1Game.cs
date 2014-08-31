@@ -68,8 +68,8 @@ namespace Project1
 
         protected override void LoadContent()
         {
-            model = new Landscape(this, 1, 1, 1, 1, 4);
-            Console.Out.WriteLine(model);
+            model = new Landscape(this, 1, 1, 1, 1, 10);
+            
             // Camera object containing all Camera specific controls and info
             this.camera = new Camera(new Vector3(0, 0, -5), new Vector3(0, 0, -4), Vector3.UnitY, this);
 
