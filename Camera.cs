@@ -18,7 +18,7 @@ namespace Project1
         public float yaw;
 
 
-        private readonly float speed = 10f;
+        private readonly float speed = 100f;
 
         public Camera(Vector3 eye, Vector3 Target, Vector3 Up, Project1Game game) {
             this.eye = eye;
@@ -72,6 +72,7 @@ namespace Project1
             #endregion
 
             // Camera keyboard controls 
+            // TODO fix the speed of the left and right movement
             #region Camera keyboard controls
             Vector3 forward = (Vector3)Vector3.Transform(this.reference, Matrix.RotationY(this.yaw));
 

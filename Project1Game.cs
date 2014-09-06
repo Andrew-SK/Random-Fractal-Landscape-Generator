@@ -71,7 +71,7 @@ namespace Project1
             model = new Landscape(this, 1, 1, 1, 1, 10);
             
             // Camera object containing all Camera specific controls and info
-            this.camera = new Camera(new Vector3(0, 0, -5), new Vector3(0, 0, -4), Vector3.UnitY, this);
+            this.camera = new Camera(new Vector3(20, 20, 20), new Vector3(1, 0, 1), Vector3.UnitY, this);
 
             // Create an input layout from the vertices
 

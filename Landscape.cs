@@ -14,13 +14,15 @@ namespace Project1
     {
         
         // some variables to tweak generator
-        public int randScaleFactor = 1;
-        public int positionScale = 1;
+        public float randScaleFactor = 1;
+        public float positionScale = 2f;
+
         // end
 
-        // Colour zones
-        float rock;
-        float snow;
+        // height zones
+        public float water;
+        public float rock;
+        public float snow;
         // end
 
 
@@ -155,7 +157,65 @@ namespace Project1
 
         public void calcColourZones()
         {
+            // find the max and min heights
+            float highest, lowest;
+            lowest = Single.MaxValue;
+            highest = Single.MinValue;
 
+
+            for (int y = 0; y < arraySize; y++)
+            {
+                for (int x = 0; x < arraySize; x++)
+                {
+                    if (heightMap[x][y] > highest)
+                    {
+                        // this is the new highest height value
+                        highest = heightMap[x][y];
+                    }
+                    if (heightMap[x][y] < lowest)
+                    {
+                        // this is the new lowest number
+                        lowest = heightMap[x][y];
+                    }
+                }
+            }
+
+            float range = highest - lowest;
+
+            // heights in the top 10 percent with be covered with snow
+            snow = highest - range * 0.3f;
+
+            // lowest 20 percent will be covered with water and coloured brown for mud.
+            water = highest - range * 0.7f;
+
+            // between the highest 20 percent and 10 percent will be rock
+            rock = highest - range * 0.32f;
+
+            // between water and rock will be grass
+
+        }
+
+        public VertexPositionColor createVertex(Vector3 pos)
+        {
+            Color col;
+            if (pos.Y > this.snow)
+            {
+                col = Color.White;
+            }
+            else if (pos.Y > this.rock)
+            {
+                col = Color.LightGray;
+            }
+            else if (pos.Y > this.water)
+            {
+                col = Color.Green;
+            }
+            else
+            {
+                col = Color.SandyBrown;
+            }
+
+            return new VertexPositionColor(pos, col);
         }
 
         public Landscape(Project1Game game, float c1, float c2, float c3, float c4, int recDepth)
@@ -190,11 +250,15 @@ namespace Project1
             heightMap[0][arraySize - 1]             = c3;
             heightMap[arraySize - 1][arraySize - 1] = c4;
 
-			// Generate the rest of the hieght values 
+			// Generate the rest of the height values 
             diamondsquare();
+
+            // Calculate vertex colour heights
             calcColourZones();
 
-            VertexPositionColor[] vertexArray = new VertexPositionColor[(arraySize - 1) * (6 + (arraySize - 2) * 6)];
+
+            
+            VertexPositionColor[] vertexArray = new VertexPositionColor[(arraySize - 1) * (6 + (arraySize - 2) * 6) + 4];
             
             int pos = 0;
 			// Add the vertices to the array to make polygons
@@ -202,34 +266,39 @@ namespace Project1
             {
                 for (int x = 0; x <= arraySize - 1; x++)
                 {
-					vertexArray[pos++] = new VertexPositionColor(new Vector3(x * positionScale, heightMap[x][y], y * positionScale), Color.Orange);
+
+                    vertexArray[pos++] =  createVertex(new Vector3(x * positionScale, heightMap[x][y], y * positionScale));
                     if (x == 0)
                     {
-                        vertexArray[pos++] = new VertexPositionColor(new Vector3(x * positionScale, heightMap[x][y + 1], (y + 1) * positionScale), Color.DarkOrange);
-                        vertexArray[pos++] = new VertexPositionColor(new Vector3((x + 1) * positionScale, heightMap[x + 1][y], y * positionScale), Color.OrangeRed);
+
+                        vertexArray[pos++] =  createVertex(new Vector3(x * positionScale, heightMap[x][y + 1], (y + 1) * positionScale));
+                        vertexArray[pos++] =  createVertex(new Vector3((x + 1) * positionScale, heightMap[x + 1][y], y * positionScale));
                         
                     }
                     else if (x == arraySize - 1)
                     {
-                        vertexArray[pos++] = new VertexPositionColor(new Vector3((x - 1) * positionScale, heightMap[x - 1][y + 1], (y + 1) * positionScale), Color.DarkOrange);
-                        vertexArray[pos++] = new VertexPositionColor(new Vector3(x * positionScale, heightMap[x][y + 1], (y + 1) * positionScale), Color.OrangeRed);
+
+                        vertexArray[pos++] = createVertex(new Vector3((x - 1) * positionScale, heightMap[x - 1][y + 1], (y + 1) * positionScale));
+                        vertexArray[pos++] = createVertex(new Vector3(x * positionScale, heightMap[x][y + 1], (y + 1) * positionScale));
                         
                     }
                     else
                     {
-                        vertexArray[pos++] = new VertexPositionColor(new Vector3(x * positionScale, heightMap[x][y + 1], (y + 1) * positionScale), Color.DarkOrange);
-                        vertexArray[pos++] = new VertexPositionColor(new Vector3((x + 1) * positionScale, heightMap[x + 1][y], y * positionScale), Color.OrangeRed);
-                        
+                        vertexArray[pos++] = createVertex(new Vector3(x * positionScale, heightMap[x][y + 1], (y + 1) * positionScale));
+                        vertexArray[pos++] = createVertex(new Vector3((x + 1) * positionScale, heightMap[x + 1][y], y * positionScale));
 
-                        vertexArray[pos++] = new VertexPositionColor(new Vector3(x * positionScale, heightMap[x][y], y * positionScale), Color.Orange);
-                        vertexArray[pos++] = new VertexPositionColor(new Vector3((x - 1) * positionScale, heightMap[x - 1][y + 1], (y + 1) * positionScale), Color.DarkOrange);
-                        vertexArray[pos++] = new VertexPositionColor(new Vector3(x * positionScale, heightMap[x][y + 1], (y + 1) * positionScale), Color.OrangeRed);
+
+                        vertexArray[pos++] = createVertex(new Vector3(x * positionScale, heightMap[x][y], y * positionScale));
+                        vertexArray[pos++] = createVertex(new Vector3((x - 1) * positionScale, heightMap[x - 1][y + 1], (y + 1) * positionScale));
+                        vertexArray[pos++] = createVertex(new Vector3(x * positionScale, heightMap[x][y + 1], (y + 1) * positionScale));
                         
                     }
                 }
             }
 
-
+            // these vertices are for the water 
+            // TODO add water vertices 
+            vertexArray[pos++] = new VertexPositionNormalTexture()
 
                 vertices = Buffer.Vertex.New(
 
@@ -240,9 +309,10 @@ namespace Project1
             basicEffect = new BasicEffect(game.GraphicsDevice)
             {
                 VertexColorEnabled = true,
-                Projection = Matrix.PerspectiveFovLH((float)Math.PI / 4.0f, (float)game.GraphicsDevice.BackBuffer.Width / game.GraphicsDevice.BackBuffer.Height, 0.1f, 100.0f),
-                World = Matrix.Identity
+                Projection = Matrix.PerspectiveFovLH((float)Math.PI / 4.0f, (float)game.GraphicsDevice.BackBuffer.Width / game.GraphicsDevice.BackBuffer.Height, 0.1f, 10000.0f),
+                World = Matrix.Identity,
             };
+
 
             inputLayout = VertexInputLayout.FromBuffer(0, vertices);
             this.game = game;
