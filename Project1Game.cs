@@ -34,7 +34,7 @@ namespace Project1
     public class Project1Game : Game
     {
         private GraphicsDeviceManager graphicsDeviceManager;
-        private GameObject model;
+        private Landscape model;
 
         public Camera camera;
 
@@ -68,10 +68,14 @@ namespace Project1
 
         protected override void LoadContent()
         {
-            model = new Landscape(this, 1, 1, 1, 1, 10);
+            model = new Landscape(this, 1, 1, 1, 1, 11);
             
             // Camera object containing all Camera specific controls and info
-            this.camera = new Camera(new Vector3(20, 20, 20), new Vector3(1, 0, 1), Vector3.UnitY, this);
+            int camX = 50;
+            int camZ = 50;
+            Vector3 pos = new Vector3(camX, model.heightMap[camX][camX] + 50, camZ);
+            Vector3 target = pos + new Vector3(1, 0, 1);
+            this.camera = new Camera(pos, target, Vector3.UnitY, this);
 
             // Create an input layout from the vertices
 

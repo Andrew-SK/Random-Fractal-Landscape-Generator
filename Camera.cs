@@ -18,7 +18,7 @@ namespace Project1
         public float yaw;
 
 
-        private readonly float speed = 100f;
+        private readonly float speed = 1000f;
 
         public Camera(Vector3 eye, Vector3 Target, Vector3 Up, Project1Game game) {
             this.eye = eye;
@@ -75,6 +75,8 @@ namespace Project1
             // TODO fix the speed of the left and right movement
             #region Camera keyboard controls
             Vector3 forward = (Vector3)Vector3.Transform(this.reference, Matrix.RotationY(this.yaw));
+            Vector3 tempEye = this.eye;
+            Vector3 tempTarget = this.target;
 
             if (game.keyboardState.IsKeyDown(Keys.D))
             {
@@ -84,10 +86,11 @@ namespace Project1
 
                 Vector3 translationVector = (Vector3)Vector3.Transform(forward, Matrix.RotationY((float)Math.PI / 2));
                 translationVector.Normalize();
-                translationVector /= 4f;
-                
-                this.eye = (Vector3)Vector3.Transform(this.eye, Matrix.Translation(translationVector));
-                this.target = (Vector3)Vector3.Transform(this.target, Matrix.Translation(translationVector));
+
+                translationVector *= (float)gameTime.ElapsedGameTime.TotalSeconds * speed;
+
+                tempEye = (Vector3)Vector3.Transform(tempEye, Matrix.Translation(translationVector));
+                tempTarget = (Vector3)Vector3.Transform(tempTarget, Matrix.Translation(translationVector));
 
             }
             if (game.keyboardState.IsKeyDown(Keys.A))
@@ -96,37 +99,41 @@ namespace Project1
                 //  to the left at a right angle to the forward vector
                 Vector3 translationVector = (Vector3)Vector3.Transform(forward, Matrix.RotationY(-(float)Math.PI / 2));
                 translationVector.Normalize();
-                translationVector /= 4f;
 
-                this.eye = (Vector3)Vector3.Transform(this.eye, Matrix.Translation(translationVector));
-                this.target = (Vector3)Vector3.Transform(this.target, Matrix.Translation(translationVector));
+                translationVector *= (float)gameTime.ElapsedGameTime.TotalSeconds * speed;
+
+                tempEye = (Vector3)Vector3.Transform(tempEye, Matrix.Translation(translationVector));
+                tempTarget = (Vector3)Vector3.Transform(tempTarget, Matrix.Translation(translationVector));
             }
             if (game.keyboardState.IsKeyDown(Keys.W))
             {
                 // Move the camera forward towards the target
-                Vector3 trans = new Vector3(this.target.X - this.eye.X,
-                                            this.target.Y - this.eye.Y, 
-                                            this.target.Z - this.eye.Z);
+                Vector3 trans = new Vector3(tempTarget.X - tempEye.X,
+                                            tempTarget.Y - tempEye.Y, 
+                                            tempTarget.Z - tempEye.Z);
                 trans.Normalize();
-                this.eye += trans * (float)gameTime.ElapsedGameTime.TotalSeconds * speed;
-                this.target += trans * (float)gameTime.ElapsedGameTime.TotalSeconds * speed;
+                tempEye += trans * (float)gameTime.ElapsedGameTime.TotalSeconds * speed;
+                tempTarget += trans * (float)gameTime.ElapsedGameTime.TotalSeconds * speed;
             }
             if (game.keyboardState.IsKeyDown(Keys.S))
             {
                 // Move the camera backward away from the target
-                Vector3 trans = new Vector3(this.target.X - this.eye.X,
-                                            this.target.Y - this.eye.Y,
-                                            this.target.Z - this.eye.Z);
+                Vector3 trans = new Vector3(tempTarget.X - tempEye.X,
+                                            tempTarget.Y - tempEye.Y,
+                                            tempTarget.Z - tempEye.Z);
                 trans.Normalize();
-                this.eye -= trans * (float)gameTime.ElapsedGameTime.TotalSeconds * speed;
-                this.target -= trans * (float)gameTime.ElapsedGameTime.TotalSeconds * speed;
+                tempEye -= trans * (float)gameTime.ElapsedGameTime.TotalSeconds * speed;
+                tempTarget -= trans * (float)gameTime.ElapsedGameTime.TotalSeconds * speed;
             }
             #endregion
 
+            
+            this.eye = tempEye;
+            this.target = tempTarget;
 
             // output the fps to console
              Console.Out.WriteLine("FPS: " + ((float)gameTime.FrameCount / gameTime.TotalGameTime.Seconds + 0.001f));
-           // Console.Out.WriteLine("camera pos : " + this.eye);
+
             
         }
         
