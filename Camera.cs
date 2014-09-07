@@ -18,7 +18,7 @@ namespace Project1
         public float yaw;
 
 
-        private readonly float speed = 1000f;
+        private readonly float speed = 750f;
 
         public Camera(Vector3 eye, Vector3 Target, Vector3 Up, Project1Game game) {
             this.eye = eye;
@@ -127,12 +127,40 @@ namespace Project1
             }
             #endregion
 
-            
-            this.eye = tempEye;
-            this.target = tempTarget;
 
+            // find the cameras relative position on the heightMap
+            // therefore finding the vertex it is above
+            int camIndexX, camIndexZ;
+            camIndexX = (int)(tempEye.X / 2f);
+            camIndexZ = (int)(tempEye.Z / 2f);
+
+           
+
+            if (tempEye.X > 0 &&
+                tempEye.Z > 0 &&
+                tempEye.X < game.model.positionScale * game.model.arraySize &&
+                tempEye.Z < game.model.positionScale * game.model.arraySize
+                )
+            {
+
+                if (tempEye.Y < (game.model.heightMap[camIndexX][camIndexZ] + 1))
+                {
+                    tempEye += new Vector3(0, (game.model.heightMap[camIndexX][camIndexZ] + 1) - tempEye.Y + 5, 0);
+                    tempTarget += new Vector3(0, (game.model.heightMap[camIndexX][camIndexZ] + 1) - tempEye.Y + 5, 0);
+                }
+
+
+                this.eye = tempEye;
+                this.target = tempTarget;
+
+            }
+
+
+
+
+            
             // output the fps to console
-             Console.Out.WriteLine("FPS: " + ((float)gameTime.FrameCount / gameTime.TotalGameTime.Seconds + 0.001f));
+            // Console.Out.WriteLine("FPS: " + ((float)gameTime.FrameCount / gameTime.TotalGameTime.Seconds + 0.001f));
 
             
         }

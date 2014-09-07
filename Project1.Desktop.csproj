@@ -93,7 +93,6 @@
     <None Include="Landscape.cs.cube" />
     <Compile Include="Landscape.cs" />
     <Compile Include="ColoredGameObject.cs" />
-    <Compile Include="Polygon.cs" />
     <Compile Include="Project1Game.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

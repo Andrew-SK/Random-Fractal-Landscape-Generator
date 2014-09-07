@@ -10,7 +10,7 @@ using SharpDX.Toolkit.Input;
 namespace Project1
 {
     using SharpDX.Toolkit.Graphics;
-    class Landscape : ColoredGameObject
+    public class Landscape : ColoredGameObject
     {
         
         // some variables to tweak generator
@@ -227,7 +227,7 @@ namespace Project1
                 }
                 else
                 {
-                    col[i] = Color.SandyBrown;
+                    col[i] = Color.BlanchedAlmond;
                 }
 
                 vertexArray[vertexCount + i] = new VertexPositionNormalColor(pos[i], normal, col[i]);
@@ -276,7 +276,7 @@ namespace Project1
 
 
             
-            vertexArray = new VertexPositionNormalColor[(arraySize - 1) * (6 + (arraySize - 2) * 6) + 4];
+            vertexArray = new VertexPositionNormalColor[(arraySize - 1) * (6 + (arraySize - 2) * 6) + 6];
             
             vertexCount = 0;
 			// Add the vertices to the array to make polygons
@@ -329,8 +329,15 @@ namespace Project1
 
             // these vertices are for the water 
             // TODO add water vertices 
+            Color water = new Color(new Vector4(0, 0, 255, 0.5f));
+            vertexArray[vertexCount++] = new VertexPositionNormalColor(new Vector3(0, this.water, 0), Vector3.UnitY, water);
+            vertexArray[vertexCount++] = new VertexPositionNormalColor(new Vector3(0, this.water, arraySize * positionScale), Vector3.UnitY, water);
+            vertexArray[vertexCount++] = new VertexPositionNormalColor(new Vector3(arraySize * positionScale, this.water, arraySize * positionScale), Vector3.UnitY, water);
+            vertexArray[vertexCount++] = new VertexPositionNormalColor(new Vector3(0, this.water, 0), Vector3.UnitY, water);
+            vertexArray[vertexCount++] = new VertexPositionNormalColor(new Vector3(arraySize * positionScale, this.water, arraySize * positionScale), Vector3.UnitY, water);
+            vertexArray[vertexCount++] = new VertexPositionNormalColor(new Vector3(arraySize * positionScale, this.water, 0), Vector3.UnitY, water);
                 
-                vertices = Buffer.Vertex.New(
+            vertices = Buffer.Vertex.New(
 
                     game.GraphicsDevice,
                     vertexArray
@@ -346,10 +353,15 @@ namespace Project1
             };
 
             basicEffect.DirectionalLight0.Enabled = true;
-            basicEffect.DirectionalLight0.Direction = new Vector3(1f, 0, 1f);
+            basicEffect.DirectionalLight0.Direction = new Vector3((float)Math.Cos(0),
+                                                                  (float)Math.Sin(0),
+                                                                  (float)Math.Cos(0));
             basicEffect.DirectionalLight0.DiffuseColor = new Vector3(0.3f, 0.3f, 0.3f);
             basicEffect.AmbientLightColor = new Vector3(0.1f, 0.1f, 0.1f);
             basicEffect.EmissiveColor = new Vector3(0.5f, 0.5f, 0.5f);
+            
+            basicEffect.SpecularColor = new Vector3(0.3f, 0.5f, 0.5f);
+            basicEffect.SpecularPower = 1f;
 
 
             inputLayout = VertexInputLayout.FromBuffer(0, vertices);
@@ -362,8 +374,11 @@ namespace Project1
 
             var time = (float)gameTime.TotalGameTime.TotalSeconds;
 
-            
-            
+            // update the "sun" directional Lighting direction
+            basicEffect.DirectionalLight0.Direction = new Vector3((float)Math.Cos(gameTime.ElapsedGameTime.Seconds),
+                                                                  (float)Math.Sin(gameTime.ElapsedGameTime.Seconds),
+                                                                  (float)Math.Cos(gameTime.ElapsedGameTime.Seconds));
+            basicEffect.DirectionalLight0.Direction.Normalize();
 
         }
 
@@ -376,6 +391,7 @@ namespace Project1
             // Setup the vertices
             game.GraphicsDevice.SetVertexBuffer(vertices);
             game.GraphicsDevice.SetVertexInputLayout(inputLayout);
+            game.GraphicsDevice.SetBlendState(game.GraphicsDevice.BlendStates.AlphaBlend);
 
             // Apply the basic effect technique and draw the rotating cube
             basicEffect.CurrentTechnique.Passes[0].Apply();

@@ -34,7 +34,7 @@ namespace Project1
     public class Project1Game : Game
     {
         private GraphicsDeviceManager graphicsDeviceManager;
-        private Landscape model;
+        public Landscape model;
 
         public Camera camera;
 
