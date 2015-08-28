@@ -1,3 +1,11 @@
+Screenshots:
+
+![]()
+
+Landscape is light with a basic directional light, which slowly changes angle to simulate a sun moving through the sky in approximately 30 minutes.
+
+![]()
+
 The landscape pattern is generated within the diamondsquare method of the
 landscape class this takes the form of a 2d array of float values
 (landscape.heightMap[][]) , these points are then converted into an array 
